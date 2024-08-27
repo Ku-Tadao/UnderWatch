@@ -7,12 +7,163 @@
         <title>OverFast API Website</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
-            h1, h2 { color: #333; }
-            nav { margin-bottom: 20px; }
-            nav a { margin-right: 15px; text-decoration: none; color: #1a73e8; }
-            .content { margin-top: 20px; }
-            .hidden { display: none; }
+            :root {
+                --background-color: #EEF1EF;
+                --text-color: #1C2321;
+                --link-color: #5E6572;
+                --modal-background: #A9B4C2;
+                --modal-text-color: #1C2321;
+                --hero-box-background: #7D98A1;
+                --hero-box-text-color: #EEF1EF;
+                --ability-box-background: #7D98A1;
+                --ability-box-text-color: #EEF1EF;
+                --nav-background-color: #5E6572;
+                --nav-link-color: #EEF1EF;
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                padding: 20px;
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }
+
+            nav {
+                margin-bottom: 20px;
+                background-color: var(--nav-background-color);
+                padding: 10px;
+                border-radius: 8px;
+            }
+
+            nav a {
+                margin-right: 15px;
+                text-decoration: none;
+                color: var(--nav-link-color);
+            }
+
+            .content {
+                margin-top: 20px;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+
+            .modal-content {
+                background-color: var(--modal-background);
+                color: var(--modal-text-color);
+                padding: 2rem;
+                border-radius: 0.5rem;
+                max-width: 90%;
+                max-height: 90%;
+                overflow-y: auto;
+            }
+
+            .hero-name-role {
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+
+            .ability-box {
+                margin-bottom: 1rem;
+                border-radius: 10px;
+                border: 1px solid var(--text-color);
+                background: var(--ability-box-background);
+                padding: 10px;
+                color: var(--ability-box-text-color);
+            }
+
+            .ability-image {
+                width: 70px;
+                height: 70px;
+                background-color: #1C2321;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                margin-right: 15px;
+                object-fit: contain;
+            }
+
+            .ability-wide-image {
+                max-width: 23%;
+                height: auto;
+                background-color: #1C2321;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                margin-right: 15px;
+                object-fit: contain;
+            }
+
+            .ability-header {
+                font-weight: bold;
+                font-size: 1.4rem;
+                border-radius: 10px 10px 0px 0px;
+                padding: 5px;
+                background: var(--link-color);
+                display: flex;
+                justify-content: space-between;
+                color: var(--nav-link-color);
+            }
+
+            .ability-details {
+                display: flex;
+                align-items: center;
+                background: var(--hero-box-background);
+                padding: 10px;
+                border-radius: 0px 0px 10px 10px;
+            }
+
+            .hero-portrait img {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+                object-fit: cover;
+                transition: transform 0.2s ease-in-out;
+                border: 2px solid var(--text-color);
+            }
+
+            .hero-portrait img:hover {
+                transform: scale(1.05);
+            }
+
+            .role-icon, .gamemode-icon {
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
+
+            .map-image {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+            @media (max-width: 768px) {
+                .ability-image {
+                    width: 50px;
+                    height: 50px;
+                }
+                .ability-header {
+                    font-size: 1.2rem;
+                }
+            }
         </style>
     </head>
     <body>
@@ -24,55 +175,1034 @@
             <a href="#" onclick="showSection('maps')">Maps</a>
             <a href="#" onclick="showSection('players')">Players</a>
         </nav>
-        <div id="heroes" class="content"><div id="heroGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"></div></div>
-        <div id="roles" class="content hidden">Roles content here</div>
-        <div id="gamemodes" class="content hidden">Gamemodes content here</div>
-        <div id="maps" class="content hidden">Maps content here</div>
+        <div id="heroes" class="content">
+      <h2 class="text-xl font-bold mb-4">Heroes</h2>
+      <div id="heroGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('ana')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/3429c394716364bbef802180e9763d04812757c205e1b4568bc321772096ed86.png" alt="Ana" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Ana</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('ashe')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/8dc2a024c9b7d95c7141b2ef065590dbc8d9018d12ad15f76b01923986702228.png" alt="Ashe" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Ashe</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('baptiste')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/f979896f74ba22db2a92a85ae1260124ab0a26665957a624365e0f96e5ac5b5c.png" alt="Baptiste" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Baptiste</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('bastion')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/4d715f722c42215072b5dd0240904aaed7b5285df0b2b082d0a7f1865b5ea992.png" alt="Bastion" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Bastion</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('brigitte')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/48392820c6976ee1cd8dde13e71df85bf15560083ee5c8658fe7c298095d619a.png" alt="Brigitte" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Brigitte</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('cassidy')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/6cfb48b5597b657c2eafb1277dc5eef4a07eae90c265fcd37ed798189619f0a5.png" alt="Cassidy" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Cassidy</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('doomfist')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/13750471c693c1a360eb19d5ace229c8599a729cd961d72ebee0e157657b7d18.png" alt="Doomfist" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Doomfist</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('dva')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/ca114f72193e4d58a85c087e9409242f1a31e808cf4058678b8cbf767c2a9a0a.png" alt="D.Va" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">D.Va</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('echo')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/f086bf235cc6b7f138609594218a8385c8e5f6405a39eceb0deb9afb429619fe.png" alt="Echo" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Echo</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('genji')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/4edf5ea6d58c449a2aeb619a3fda9fff36a069dfbe4da8bc5d8ec1c758ddb8dc.png" alt="Genji" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Genji</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('hanzo')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/aecd8fa677f0093344fab7ccb7c37516c764df3f5ff339a5a845a030a27ba7e0.png" alt="Hanzo" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Hanzo</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('illari')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/5ea986038f9d307bd4613d5e6f2c4c8e7f15f30ceeeabbdd7a06637a38f17e1f.png" alt="Illari" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Illari</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('junker-queen')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/cef2406b2244b80506f83b8fb9ebaf214f41fa8795cbeef84026cd8018561d04.png" alt="Junker Queen" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Junker Queen</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('junkrat')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/037e3df083624e5480f8996821287479a375f62b470572a22773da0eaf9441d0.png" alt="Junkrat" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Junkrat</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('juno')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/585b2d60cbd3c271b6ad5ad0922537af0c6836fab6c89cb9979077f7bb0832b5.png" alt="Juno" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Juno</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('kiriko')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/088aff2153bdfa426984b1d5c912f6af0ab313f0865a81be0edd114e9a2f79f9.png" alt="Kiriko" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Kiriko</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('lifeweaver')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/39d4514f1b858bc228035b09d5a74ed41f8eeefc9a0d1873570b216ba04334df.png" alt="Lifeweaver" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Lifeweaver</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('lucio')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/e2ff2527610a0fbe0c9956f80925123ef3e66c213003e29d37436de30b90e4e1.png" alt="Lúcio" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Lúcio</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('mauga')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/9ee3f5a62893091d575ec0a0d66df878597086374202c6fc7da2d63320a7d02e.png" alt="Mauga" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Mauga</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('mei')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/1533fcb0ee1d3f9586f84b4067c6f63eca3322c1c661f69bfb41cd9e4f4bcc11.png" alt="Mei" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Mei</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('mercy')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/2508ddd39a178d5f6ae993ab43eeb3e7961e5a54a9507e6ae347381193f28943.png" alt="Mercy" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Mercy</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('moira')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/000beeb5606e01497897fa9210dd3b1e78e1159ebfd8afdc9e989047d7d3d08f.png" alt="Moira" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Moira</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('orisa')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/71e96294617e81051d120b5d04b491bb1ea40e2933da44d6631aae149aac411d.png" alt="Orisa" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Orisa</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('pharah')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/f8261595eca3e43e3b37cadb8161902cc416e38b7e0caa855f4555001156d814.png" alt="Pharah" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Pharah</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('ramattra')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/3e0367155e1940a24da076c6f1f065aacede88dbc323631491aa0cd5a51e0b66.png" alt="Ramattra" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Ramattra</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('reaper')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/2edb9af69d987bb503cd31f7013ae693640e692b321a73d175957b9e64394f40.png" alt="Reaper" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Reaper</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('reinhardt')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/490d2f79f8547d6e364306af60c8184fb8024b8e55809e4cc501126109981a65.png" alt="Reinhardt" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Reinhardt</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('roadhog')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/72e02e747b66b61fcbc02d35d350770b3ec7cbaabd0a7ca17c0d82743d43a7e8.png" alt="Roadhog" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Roadhog</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('sigma')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/cd7a4c0a0df8924afb2c9f6df864ed040f20250440c36ca2eb634acf6609c5e4.png" alt="Sigma" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Sigma</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('sojourn')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a53bf7ad9d2f33aaf9199a00989f86d4ba1f67c281ba550312c7d96e70fec4ea.png" alt="Sojourn" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Sojourn</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('soldier-76')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/20b4ef00ed05d6dba75df228241ed528df7b6c9556f04c8070bad1e2f89e0ff5.png" alt="Soldier: 76" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Soldier: 76</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('sombra')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/bca8532688f01b071806063b9472f1c0f9fc9c7948e6b59e210006e69cec9022.png" alt="Sombra" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Sombra</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('symmetra')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/7f2024c5387c9d76d944a5db021c2774d1e9d7cbf39e9b6a35b364d38ea250ac.png" alt="Symmetra" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Symmetra</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('torbjorn')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/1309ab1add1cc19189a2c8bc7b1471f88efa1073e9705d2397fdb37d45707d01.png" alt="Torbjörn" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Torbjörn</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('tracer')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a66413200e934da19540afac965cfe8a2de4ada593d9a52d53108bb28e8bbc9c.png" alt="Tracer" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Tracer</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('venture')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e33dd756c8a1abca519af6c3bf26813f2f81d39885373539efcf8442c4bc647.png" alt="Venture" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Venture</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('widowmaker')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/a714f1cb33cc91c6b5b3e89ffe7e325b99e7c89cc8e8feced594f81305147efe.png" alt="Widowmaker" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Widowmaker</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('winston')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/bd9c8e634d89488459dfc1aeb21b602fa5c39aa05601a4167682f3a3fed4e0ee.png" alt="Winston" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Winston</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('wrecking-ball')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/5c18e39ce567ee8a84078f775b9f76a2ba891de601c059a3d2b46b61ae4afb42.png" alt="Wrecking Ball" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Wrecking Ball</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('zarya')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/8819ba85823136640d8eba2af6fd7b19d46b9ee8ab192a4e06f396d1e5231f7a.png" alt="Zarya" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Zarya</h3>
+                  </div>
+              </div>
+          
+              <div class="relative cursor-pointer hero-portrait" onclick="showHeroDetails('zenyatta')">
+                  <div class="aspect-w-1 aspect-h-1">
+                      <img src="https://d15f34w2p8l1cc.cloudfront.net/overwatch/71cabc939c577581f66b952f9c70891db779251e8e70f29de3c7bf494edacfe4.png" alt="Zenyatta" class="w-full h-full object-cover rounded-lg">
+                  </div>
+                  <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
+                      <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>
+                  </div>
+                  <div class="mt-2">
+                      <h3 class="text-lg font-semibold">Zenyatta</h3>
+                  </div>
+              </div>
+          
+      </div>
+  </div>
+        <div id="roles" class="content hidden">
+      <h2 class="text-xl font-bold mb-4">Roles</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltf0889daa1ef606db/6504cff74d2a764cb7973991/Tank.svg?format=webply&quality=90" alt="Tank" class="role-icon">
+                      <h3 class="text-lg font-semibold">Tank</h3>
+                  </div>
+                  <p>Tank heroes soak up damage and shatter fortified positions, like closely grouped enemies and narrow chokepoints. If you’re a tank, you lead the charge.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt05d482c88096959a/6504cff7d9caa1285f64b6bd/Damage.svg?format=webply&quality=90" alt="Damage" class="role-icon">
+                      <h3 class="text-lg font-semibold">Damage</h3>
+                  </div>
+                  <p>Damage heroes seek out, engage, and obliterate the enemy with wide-ranging tools, abilities, and play styles. Fearsome but fragile, these heroes require backup to survive.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt3ccd5df488163b33/6504cff7fc2ae4d7c50445c4/Support.svg?format=webply&quality=90" alt="Support" class="role-icon">
+                      <h3 class="text-lg font-semibold">Support</h3>
+                  </div>
+                  <p>Support heroes empower their allies by healing, shielding, boosting damage, and disabling foes. As a support, you’re the backbone of your team’s survival.</p>
+              </div>
+          
+      </div>
+  </div>
+        <div id="gamemodes" class="content hidden">
+      <h2 class="text-xl font-bold mb-4">Gamemodes</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/assault-icon.svg" alt="Assault" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Assault</h3>
+                  </div>
+                  <p>Teams fight to capture or defend two successive points against the enemy team. It's an inactive Overwatch 1 gamemode, also called 2CP.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/capture-the-flag-icon.svg" alt="Capture the Flag" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Capture the Flag</h3>
+                  </div>
+                  <p>Teams compete to capture the enemy team’s flag while defending their own.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/control-icon.svg" alt="Control" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Control</h3>
+                  </div>
+                  <p>Teams fight to hold a single objective. The first team to win two rounds wins the map.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/deathmatch-icon.svg" alt="Deathmatch" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Deathmatch</h3>
+                  </div>
+                  <p>Race to reach 20 points first by racking up kills in a free-for-all format.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/elimination-icon.svg" alt="Elimination" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Elimination</h3>
+                  </div>
+                  <p>Dispatch all enemies to win the round. Win three rounds to claim victory. Available with teams of one, three, or six.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/escort-icon.svg" alt="Escort" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Escort</h3>
+                  </div>
+                  <p>One team escorts a payload to its delivery point, while the other races to stop them.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/flashpoint-icon.svg" alt="Flashpoint" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Flashpoint</h3>
+                  </div>
+                  <p>Teams fight across our biggest PVP maps to date, New Junk City and Suravasa, to seize control of five different objectives in a fast-paced, best-of-five battle!</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/hybrid-icon.svg" alt="Hybrid" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Hybrid</h3>
+                  </div>
+                  <p>Attackers capture a payload, then escort it to its destination; defenders try to hold them back.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/push-icon.svg" alt="Push" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Push</h3>
+                  </div>
+                  <p>Teams battle to take control of a robot and push it toward the enemy base.</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <div class="flex items-center mb-2">
+                      <img src="https://overfast-api.tekrop.fr/static/gamemodes/team-deathmatch-icon.svg" alt="Team Deathmatch" class="gamemode-icon">
+                      <h3 class="text-lg font-semibold">Team Deathmatch</h3>
+                  </div>
+                  <p>Team up and triumph over your enemies by scoring the most kills.</p>
+              </div>
+          
+      </div>
+  </div>
+        <div id="maps" class="content hidden">
+      <h2 class="text-xl font-bold mb-4">Maps</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/hanamura.jpg" alt="Hanamura" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Hanamura</h3>
+                  <p>Location: Tokyo, Japan</p>
+                  <p>Country: JP</p>
+                  <p>Gamemodes: assault</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/horizon.jpg" alt="Horizon Lunar Colony" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Horizon Lunar Colony</h3>
+                  <p>Location: Earth's moon</p>
+                  <p>Country: N/A</p>
+                  <p>Gamemodes: assault</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/paris.jpg" alt="Paris" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Paris</h3>
+                  <p>Location: Paris, France</p>
+                  <p>Country: FR</p>
+                  <p>Gamemodes: assault</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/anubis.jpg" alt="Temple of Anubis" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Temple of Anubis</h3>
+                  <p>Location: Giza Plateau, Egypt</p>
+                  <p>Country: EG</p>
+                  <p>Gamemodes: assault</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/volskaya.jpg" alt="Volskaya Industries" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Volskaya Industries</h3>
+                  <p>Location: St. Petersburg, Russia</p>
+                  <p>Country: RU</p>
+                  <p>Gamemodes: assault</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/ayutthaya.jpg" alt="Ayutthaya" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Ayutthaya</h3>
+                  <p>Location: Thailand</p>
+                  <p>Country: TH</p>
+                  <p>Gamemodes: capture-the-flag</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/busan.jpg" alt="Busan" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Busan</h3>
+                  <p>Location: South Korea</p>
+                  <p>Country: KR</p>
+                  <p>Gamemodes: control</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/nepal.jpg" alt="Nepal" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Nepal</h3>
+                  <p>Location: Nepal</p>
+                  <p>Country: NP</p>
+                  <p>Gamemodes: control</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/ilios.jpg" alt="Ilios" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Ilios</h3>
+                  <p>Location: Greece</p>
+                  <p>Country: GR</p>
+                  <p>Gamemodes: control</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/oasis.jpg" alt="Oasis" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Oasis</h3>
+                  <p>Location: Iraq</p>
+                  <p>Country: IQ</p>
+                  <p>Gamemodes: control</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/lijiang.jpg" alt="Lijiang Tower" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Lijiang Tower</h3>
+                  <p>Location: China</p>
+                  <p>Country: CN</p>
+                  <p>Gamemodes: control</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/chateau_guillard.jpg" alt="Château Guillard" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Château Guillard</h3>
+                  <p>Location: Annecy, France</p>
+                  <p>Country: FR</p>
+                  <p>Gamemodes: deathmatch, team-deathmatch</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/kanezaka.jpg" alt="Kanezaka" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Kanezaka</h3>
+                  <p>Location: Tokyo, Japan</p>
+                  <p>Country: JP</p>
+                  <p>Gamemodes: deathmatch, team-deathmatch</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/malevento.jpg" alt="Malevento" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Malevento</h3>
+                  <p>Location: Italy</p>
+                  <p>Country: IT</p>
+                  <p>Gamemodes: deathmatch, team-deathmatch</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/petra.jpg" alt="Petra" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Petra</h3>
+                  <p>Location: Southern Jordan</p>
+                  <p>Country: JO</p>
+                  <p>Gamemodes: deathmatch, team-deathmatch</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/black_forest.jpg" alt="Black Forest" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Black Forest</h3>
+                  <p>Location: Germany</p>
+                  <p>Country: DE</p>
+                  <p>Gamemodes: elimination</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/castillo.jpg" alt="Castillo" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Castillo</h3>
+                  <p>Location: Mexico</p>
+                  <p>Country: MX</p>
+                  <p>Gamemodes: elimination</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/ecopoint_antarctica.jpg" alt="Ecopoint: Antarctica" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Ecopoint: Antarctica</h3>
+                  <p>Location: Antarctica</p>
+                  <p>Country: AQ</p>
+                  <p>Gamemodes: elimination</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/necropolis.jpg" alt="Necropolis" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Necropolis</h3>
+                  <p>Location: Egypt</p>
+                  <p>Country: EG</p>
+                  <p>Gamemodes: elimination</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/circuit_royal.jpg" alt="Circuit Royal" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Circuit Royal</h3>
+                  <p>Location: Monte Carlo, Monaco</p>
+                  <p>Country: MC</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/dorado.jpg" alt="Dorado" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Dorado</h3>
+                  <p>Location: Mexico</p>
+                  <p>Country: MX</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/route_66.jpg" alt="Route 66" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Route 66</h3>
+                  <p>Location: Albuquerque, New Mexico, United States</p>
+                  <p>Country: US</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/junkertown.jpg" alt="Junkertown" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Junkertown</h3>
+                  <p>Location: Central Australia</p>
+                  <p>Country: AU</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/rialto.jpg" alt="Rialto" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Rialto</h3>
+                  <p>Location: Venice, Italy</p>
+                  <p>Country: IT</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/havana.jpg" alt="Havana" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Havana</h3>
+                  <p>Location: Havana, Cuba</p>
+                  <p>Country: CU</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/gibraltar.jpg" alt="Watchpoint: Gibraltar" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Watchpoint: Gibraltar</h3>
+                  <p>Location: Gibraltar</p>
+                  <p>Country: GI</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/shambali.jpg" alt="Shambali Monastery" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Shambali Monastery</h3>
+                  <p>Location: Nepal</p>
+                  <p>Country: NP</p>
+                  <p>Gamemodes: escort</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/blizzard_world.jpg" alt="Blizzard World" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Blizzard World</h3>
+                  <p>Location: Irvine, California, United States</p>
+                  <p>Country: US</p>
+                  <p>Gamemodes: hybrid</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/numbani.jpg" alt="Numbani" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Numbani</h3>
+                  <p>Location: Numbani (near Nigeria)</p>
+                  <p>Country: N/A</p>
+                  <p>Gamemodes: hybrid</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/hollywood.jpg" alt="Hollywood" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Hollywood</h3>
+                  <p>Location: Los Angeles, United States</p>
+                  <p>Country: US</p>
+                  <p>Gamemodes: hybrid</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/eichenwalde.jpg" alt="Eichenwalde" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Eichenwalde</h3>
+                  <p>Location: Stuttgart, Germany</p>
+                  <p>Country: DE</p>
+                  <p>Gamemodes: hybrid</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/kings_row.jpg" alt="King’s Row" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">King’s Row</h3>
+                  <p>Location: London, United Kingdom</p>
+                  <p>Country: UK</p>
+                  <p>Gamemodes: hybrid</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/midtown.jpg" alt="Midtown" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Midtown</h3>
+                  <p>Location: New York, United States</p>
+                  <p>Country: US</p>
+                  <p>Gamemodes: hybrid</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/paraiso.jpg" alt="Paraíso" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Paraíso</h3>
+                  <p>Location: Rio de Janeiro, Brazil</p>
+                  <p>Country: BR</p>
+                  <p>Gamemodes: hybrid</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/colosseo.jpg" alt="Colosseo" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Colosseo</h3>
+                  <p>Location: Rome, Italy</p>
+                  <p>Country: IT</p>
+                  <p>Gamemodes: push</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/esperanca.jpg" alt="Esperança" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Esperança</h3>
+                  <p>Location: Portugal</p>
+                  <p>Country: PT</p>
+                  <p>Gamemodes: push</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/new_queen_street.jpg" alt="New Queen Street" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">New Queen Street</h3>
+                  <p>Location: Toronto, Canada</p>
+                  <p>Country: CA</p>
+                  <p>Gamemodes: push</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/antarctic_peninsula.jpg" alt="Antarctic Peninsula" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Antarctic Peninsula</h3>
+                  <p>Location: Antarctica</p>
+                  <p>Country: AQ</p>
+                  <p>Gamemodes: control</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/new_junk_city.jpg" alt="New Junk City" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">New Junk City</h3>
+                  <p>Location: Central Australia</p>
+                  <p>Country: AU</p>
+                  <p>Gamemodes: flashpoint</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/suravasa.jpg" alt="Suravasa" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Suravasa</h3>
+                  <p>Location: India</p>
+                  <p>Country: IN</p>
+                  <p>Gamemodes: flashpoint</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/samoa.jpg" alt="Samoa" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Samoa</h3>
+                  <p>Location: Samoa</p>
+                  <p>Country: WS</p>
+                  <p>Gamemodes: control</p>
+              </div>
+          
+              <div class="bg-gray-100 p-4 rounded-lg">
+                  <img src="https://overfast-api.tekrop.fr/static/maps/runasapi.jpg" alt="Runasapi" class="map-image mb-2">
+                  <h3 class="text-lg font-semibold">Runasapi</h3>
+                  <p>Location: Peru</p>
+                  <p>Country: PE</p>
+                  <p>Gamemodes: push</p>
+              </div>
+          
+      </div>
+  </div>
         <div id="players" class="content hidden">
-            <h2>Player Search</h2>
-            <input type="text" id="playerInput" placeholder="Enter player ID">
-            <button onclick="searchPlayer()">Search</button>
-            <div id="playerResult"></div>
+            <h2 class="text-xl font-bold mb-4">Player Search</h2>
+            <input type="text" id="playerInput" placeholder="Enter player ID" class="border p-2 mr-2">
+            <button onclick="searchPlayer()" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+            <div id="playerResult" class="mt-4"></div>
+        </div>
+        <div id="heroModal" class="modal hidden">
+            <div class="modal-content">
+                <h2 id="modalHeroName" class="hero-name-role"></h2>
+                <div id="modalHeroDetails"></div>
+                <button onclick="closeModal()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Close</button>
+            </div>
         </div>
         <script>
+        const API_BASE_URL = 'https://overfast-api.tekrop.fr';
+        let heroes = [{"key":"ana","name":"Ana","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/3429c394716364bbef802180e9763d04812757c205e1b4568bc321772096ed86.png","role":"support"},{"key":"ashe","name":"Ashe","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/8dc2a024c9b7d95c7141b2ef065590dbc8d9018d12ad15f76b01923986702228.png","role":"damage"},{"key":"baptiste","name":"Baptiste","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/f979896f74ba22db2a92a85ae1260124ab0a26665957a624365e0f96e5ac5b5c.png","role":"support"},{"key":"bastion","name":"Bastion","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/4d715f722c42215072b5dd0240904aaed7b5285df0b2b082d0a7f1865b5ea992.png","role":"damage"},{"key":"brigitte","name":"Brigitte","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/48392820c6976ee1cd8dde13e71df85bf15560083ee5c8658fe7c298095d619a.png","role":"support"},{"key":"cassidy","name":"Cassidy","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/6cfb48b5597b657c2eafb1277dc5eef4a07eae90c265fcd37ed798189619f0a5.png","role":"damage"},{"key":"doomfist","name":"Doomfist","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/13750471c693c1a360eb19d5ace229c8599a729cd961d72ebee0e157657b7d18.png","role":"tank"},{"key":"dva","name":"D.Va","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/ca114f72193e4d58a85c087e9409242f1a31e808cf4058678b8cbf767c2a9a0a.png","role":"tank"},{"key":"echo","name":"Echo","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/f086bf235cc6b7f138609594218a8385c8e5f6405a39eceb0deb9afb429619fe.png","role":"damage"},{"key":"genji","name":"Genji","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/4edf5ea6d58c449a2aeb619a3fda9fff36a069dfbe4da8bc5d8ec1c758ddb8dc.png","role":"damage"},{"key":"hanzo","name":"Hanzo","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/aecd8fa677f0093344fab7ccb7c37516c764df3f5ff339a5a845a030a27ba7e0.png","role":"damage"},{"key":"illari","name":"Illari","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/5ea986038f9d307bd4613d5e6f2c4c8e7f15f30ceeeabbdd7a06637a38f17e1f.png","role":"support"},{"key":"junker-queen","name":"Junker Queen","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/cef2406b2244b80506f83b8fb9ebaf214f41fa8795cbeef84026cd8018561d04.png","role":"tank"},{"key":"junkrat","name":"Junkrat","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/037e3df083624e5480f8996821287479a375f62b470572a22773da0eaf9441d0.png","role":"damage"},{"key":"juno","name":"Juno","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/585b2d60cbd3c271b6ad5ad0922537af0c6836fab6c89cb9979077f7bb0832b5.png","role":"support"},{"key":"kiriko","name":"Kiriko","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/088aff2153bdfa426984b1d5c912f6af0ab313f0865a81be0edd114e9a2f79f9.png","role":"support"},{"key":"lifeweaver","name":"Lifeweaver","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/39d4514f1b858bc228035b09d5a74ed41f8eeefc9a0d1873570b216ba04334df.png","role":"support"},{"key":"lucio","name":"Lúcio","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/e2ff2527610a0fbe0c9956f80925123ef3e66c213003e29d37436de30b90e4e1.png","role":"support"},{"key":"mauga","name":"Mauga","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/9ee3f5a62893091d575ec0a0d66df878597086374202c6fc7da2d63320a7d02e.png","role":"tank"},{"key":"mei","name":"Mei","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/1533fcb0ee1d3f9586f84b4067c6f63eca3322c1c661f69bfb41cd9e4f4bcc11.png","role":"damage"},{"key":"mercy","name":"Mercy","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/2508ddd39a178d5f6ae993ab43eeb3e7961e5a54a9507e6ae347381193f28943.png","role":"support"},{"key":"moira","name":"Moira","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/000beeb5606e01497897fa9210dd3b1e78e1159ebfd8afdc9e989047d7d3d08f.png","role":"support"},{"key":"orisa","name":"Orisa","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/71e96294617e81051d120b5d04b491bb1ea40e2933da44d6631aae149aac411d.png","role":"tank"},{"key":"pharah","name":"Pharah","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/f8261595eca3e43e3b37cadb8161902cc416e38b7e0caa855f4555001156d814.png","role":"damage"},{"key":"ramattra","name":"Ramattra","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/3e0367155e1940a24da076c6f1f065aacede88dbc323631491aa0cd5a51e0b66.png","role":"tank"},{"key":"reaper","name":"Reaper","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/2edb9af69d987bb503cd31f7013ae693640e692b321a73d175957b9e64394f40.png","role":"damage"},{"key":"reinhardt","name":"Reinhardt","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/490d2f79f8547d6e364306af60c8184fb8024b8e55809e4cc501126109981a65.png","role":"tank"},{"key":"roadhog","name":"Roadhog","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/72e02e747b66b61fcbc02d35d350770b3ec7cbaabd0a7ca17c0d82743d43a7e8.png","role":"tank"},{"key":"sigma","name":"Sigma","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/cd7a4c0a0df8924afb2c9f6df864ed040f20250440c36ca2eb634acf6609c5e4.png","role":"tank"},{"key":"sojourn","name":"Sojourn","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/a53bf7ad9d2f33aaf9199a00989f86d4ba1f67c281ba550312c7d96e70fec4ea.png","role":"damage"},{"key":"soldier-76","name":"Soldier: 76","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/20b4ef00ed05d6dba75df228241ed528df7b6c9556f04c8070bad1e2f89e0ff5.png","role":"damage"},{"key":"sombra","name":"Sombra","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/bca8532688f01b071806063b9472f1c0f9fc9c7948e6b59e210006e69cec9022.png","role":"damage"},{"key":"symmetra","name":"Symmetra","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/7f2024c5387c9d76d944a5db021c2774d1e9d7cbf39e9b6a35b364d38ea250ac.png","role":"damage"},{"key":"torbjorn","name":"Torbjörn","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/1309ab1add1cc19189a2c8bc7b1471f88efa1073e9705d2397fdb37d45707d01.png","role":"damage"},{"key":"tracer","name":"Tracer","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/a66413200e934da19540afac965cfe8a2de4ada593d9a52d53108bb28e8bbc9c.png","role":"damage"},{"key":"venture","name":"Venture","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/7e33dd756c8a1abca519af6c3bf26813f2f81d39885373539efcf8442c4bc647.png","role":"damage"},{"key":"widowmaker","name":"Widowmaker","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/a714f1cb33cc91c6b5b3e89ffe7e325b99e7c89cc8e8feced594f81305147efe.png","role":"damage"},{"key":"winston","name":"Winston","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/bd9c8e634d89488459dfc1aeb21b602fa5c39aa05601a4167682f3a3fed4e0ee.png","role":"tank"},{"key":"wrecking-ball","name":"Wrecking Ball","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/5c18e39ce567ee8a84078f775b9f76a2ba891de601c059a3d2b46b61ae4afb42.png","role":"tank"},{"key":"zarya","name":"Zarya","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/8819ba85823136640d8eba2af6fd7b19d46b9ee8ab192a4e06f396d1e5231f7a.png","role":"tank"},{"key":"zenyatta","name":"Zenyatta","portrait":"https://d15f34w2p8l1cc.cloudfront.net/overwatch/71cabc939c577581f66b952f9c70891db779251e8e70f29de3c7bf494edacfe4.png","role":"support"}];
+        let roles = [{"key":"tank","name":"Tank","icon":"https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltf0889daa1ef606db/6504cff74d2a764cb7973991/Tank.svg?format=webply&quality=90","description":"Tank heroes soak up damage and shatter fortified positions, like closely grouped enemies and narrow chokepoints. If you’re a tank, you lead the charge."},{"key":"damage","name":"Damage","icon":"https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt05d482c88096959a/6504cff7d9caa1285f64b6bd/Damage.svg?format=webply&quality=90","description":"Damage heroes seek out, engage, and obliterate the enemy with wide-ranging tools, abilities, and play styles. Fearsome but fragile, these heroes require backup to survive."},{"key":"support","name":"Support","icon":"https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt3ccd5df488163b33/6504cff7fc2ae4d7c50445c4/Support.svg?format=webply&quality=90","description":"Support heroes empower their allies by healing, shielding, boosting damage, and disabling foes. As a support, you’re the backbone of your team’s survival."}];
+        let gamemodes = [{"key":"assault","name":"Assault","icon":"https://overfast-api.tekrop.fr/static/gamemodes/assault-icon.svg","description":"Teams fight to capture or defend two successive points against the enemy team. It's an inactive Overwatch 1 gamemode, also called 2CP.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/assault.avif"},{"key":"capture-the-flag","name":"Capture the Flag","icon":"https://overfast-api.tekrop.fr/static/gamemodes/capture-the-flag-icon.svg","description":"Teams compete to capture the enemy team’s flag while defending their own.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/capture-the-flag.avif"},{"key":"control","name":"Control","icon":"https://overfast-api.tekrop.fr/static/gamemodes/control-icon.svg","description":"Teams fight to hold a single objective. The first team to win two rounds wins the map.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/control.avif"},{"key":"deathmatch","name":"Deathmatch","icon":"https://overfast-api.tekrop.fr/static/gamemodes/deathmatch-icon.svg","description":"Race to reach 20 points first by racking up kills in a free-for-all format.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/deathmatch.avif"},{"key":"elimination","name":"Elimination","icon":"https://overfast-api.tekrop.fr/static/gamemodes/elimination-icon.svg","description":"Dispatch all enemies to win the round. Win three rounds to claim victory. Available with teams of one, three, or six.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/elimination.avif"},{"key":"escort","name":"Escort","icon":"https://overfast-api.tekrop.fr/static/gamemodes/escort-icon.svg","description":"One team escorts a payload to its delivery point, while the other races to stop them.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/escort.avif"},{"key":"flashpoint","name":"Flashpoint","icon":"https://overfast-api.tekrop.fr/static/gamemodes/flashpoint-icon.svg","description":"Teams fight across our biggest PVP maps to date, New Junk City and Suravasa, to seize control of five different objectives in a fast-paced, best-of-five battle!","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/flashpoint.avif"},{"key":"hybrid","name":"Hybrid","icon":"https://overfast-api.tekrop.fr/static/gamemodes/hybrid-icon.svg","description":"Attackers capture a payload, then escort it to its destination; defenders try to hold them back.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/hybrid.avif"},{"key":"push","name":"Push","icon":"https://overfast-api.tekrop.fr/static/gamemodes/push-icon.svg","description":"Teams battle to take control of a robot and push it toward the enemy base.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/push.avif"},{"key":"team-deathmatch","name":"Team Deathmatch","icon":"https://overfast-api.tekrop.fr/static/gamemodes/team-deathmatch-icon.svg","description":"Team up and triumph over your enemies by scoring the most kills.","screenshot":"https://overfast-api.tekrop.fr/static/gamemodes/team-deathmatch.avif"}];
+        let maps = [{"name":"Hanamura","screenshot":"https://overfast-api.tekrop.fr/static/maps/hanamura.jpg","gamemodes":["assault"],"location":"Tokyo, Japan","country_code":"JP"},{"name":"Horizon Lunar Colony","screenshot":"https://overfast-api.tekrop.fr/static/maps/horizon.jpg","gamemodes":["assault"],"location":"Earth's moon","country_code":null},{"name":"Paris","screenshot":"https://overfast-api.tekrop.fr/static/maps/paris.jpg","gamemodes":["assault"],"location":"Paris, France","country_code":"FR"},{"name":"Temple of Anubis","screenshot":"https://overfast-api.tekrop.fr/static/maps/anubis.jpg","gamemodes":["assault"],"location":"Giza Plateau, Egypt","country_code":"EG"},{"name":"Volskaya Industries","screenshot":"https://overfast-api.tekrop.fr/static/maps/volskaya.jpg","gamemodes":["assault"],"location":"St. Petersburg, Russia","country_code":"RU"},{"name":"Ayutthaya","screenshot":"https://overfast-api.tekrop.fr/static/maps/ayutthaya.jpg","gamemodes":["capture-the-flag"],"location":"Thailand","country_code":"TH"},{"name":"Busan","screenshot":"https://overfast-api.tekrop.fr/static/maps/busan.jpg","gamemodes":["control"],"location":"South Korea","country_code":"KR"},{"name":"Nepal","screenshot":"https://overfast-api.tekrop.fr/static/maps/nepal.jpg","gamemodes":["control"],"location":"Nepal","country_code":"NP"},{"name":"Ilios","screenshot":"https://overfast-api.tekrop.fr/static/maps/ilios.jpg","gamemodes":["control"],"location":"Greece","country_code":"GR"},{"name":"Oasis","screenshot":"https://overfast-api.tekrop.fr/static/maps/oasis.jpg","gamemodes":["control"],"location":"Iraq","country_code":"IQ"},{"name":"Lijiang Tower","screenshot":"https://overfast-api.tekrop.fr/static/maps/lijiang.jpg","gamemodes":["control"],"location":"China","country_code":"CN"},{"name":"Château Guillard","screenshot":"https://overfast-api.tekrop.fr/static/maps/chateau_guillard.jpg","gamemodes":["deathmatch","team-deathmatch"],"location":"Annecy, France","country_code":"FR"},{"name":"Kanezaka","screenshot":"https://overfast-api.tekrop.fr/static/maps/kanezaka.jpg","gamemodes":["deathmatch","team-deathmatch"],"location":"Tokyo, Japan","country_code":"JP"},{"name":"Malevento","screenshot":"https://overfast-api.tekrop.fr/static/maps/malevento.jpg","gamemodes":["deathmatch","team-deathmatch"],"location":"Italy","country_code":"IT"},{"name":"Petra","screenshot":"https://overfast-api.tekrop.fr/static/maps/petra.jpg","gamemodes":["deathmatch","team-deathmatch"],"location":"Southern Jordan","country_code":"JO"},{"name":"Black Forest","screenshot":"https://overfast-api.tekrop.fr/static/maps/black_forest.jpg","gamemodes":["elimination"],"location":"Germany","country_code":"DE"},{"name":"Castillo","screenshot":"https://overfast-api.tekrop.fr/static/maps/castillo.jpg","gamemodes":["elimination"],"location":"Mexico","country_code":"MX"},{"name":"Ecopoint: Antarctica","screenshot":"https://overfast-api.tekrop.fr/static/maps/ecopoint_antarctica.jpg","gamemodes":["elimination"],"location":"Antarctica","country_code":"AQ"},{"name":"Necropolis","screenshot":"https://overfast-api.tekrop.fr/static/maps/necropolis.jpg","gamemodes":["elimination"],"location":"Egypt","country_code":"EG"},{"name":"Circuit Royal","screenshot":"https://overfast-api.tekrop.fr/static/maps/circuit_royal.jpg","gamemodes":["escort"],"location":"Monte Carlo, Monaco","country_code":"MC"},{"name":"Dorado","screenshot":"https://overfast-api.tekrop.fr/static/maps/dorado.jpg","gamemodes":["escort"],"location":"Mexico","country_code":"MX"},{"name":"Route 66","screenshot":"https://overfast-api.tekrop.fr/static/maps/route_66.jpg","gamemodes":["escort"],"location":"Albuquerque, New Mexico, United States","country_code":"US"},{"name":"Junkertown","screenshot":"https://overfast-api.tekrop.fr/static/maps/junkertown.jpg","gamemodes":["escort"],"location":"Central Australia","country_code":"AU"},{"name":"Rialto","screenshot":"https://overfast-api.tekrop.fr/static/maps/rialto.jpg","gamemodes":["escort"],"location":"Venice, Italy","country_code":"IT"},{"name":"Havana","screenshot":"https://overfast-api.tekrop.fr/static/maps/havana.jpg","gamemodes":["escort"],"location":"Havana, Cuba","country_code":"CU"},{"name":"Watchpoint: Gibraltar","screenshot":"https://overfast-api.tekrop.fr/static/maps/gibraltar.jpg","gamemodes":["escort"],"location":"Gibraltar","country_code":"GI"},{"name":"Shambali Monastery","screenshot":"https://overfast-api.tekrop.fr/static/maps/shambali.jpg","gamemodes":["escort"],"location":"Nepal","country_code":"NP"},{"name":"Blizzard World","screenshot":"https://overfast-api.tekrop.fr/static/maps/blizzard_world.jpg","gamemodes":["hybrid"],"location":"Irvine, California, United States","country_code":"US"},{"name":"Numbani","screenshot":"https://overfast-api.tekrop.fr/static/maps/numbani.jpg","gamemodes":["hybrid"],"location":"Numbani (near Nigeria)","country_code":null},{"name":"Hollywood","screenshot":"https://overfast-api.tekrop.fr/static/maps/hollywood.jpg","gamemodes":["hybrid"],"location":"Los Angeles, United States","country_code":"US"},{"name":"Eichenwalde","screenshot":"https://overfast-api.tekrop.fr/static/maps/eichenwalde.jpg","gamemodes":["hybrid"],"location":"Stuttgart, Germany","country_code":"DE"},{"name":"King’s Row","screenshot":"https://overfast-api.tekrop.fr/static/maps/kings_row.jpg","gamemodes":["hybrid"],"location":"London, United Kingdom","country_code":"UK"},{"name":"Midtown","screenshot":"https://overfast-api.tekrop.fr/static/maps/midtown.jpg","gamemodes":["hybrid"],"location":"New York, United States","country_code":"US"},{"name":"Paraíso","screenshot":"https://overfast-api.tekrop.fr/static/maps/paraiso.jpg","gamemodes":["hybrid"],"location":"Rio de Janeiro, Brazil","country_code":"BR"},{"name":"Colosseo","screenshot":"https://overfast-api.tekrop.fr/static/maps/colosseo.jpg","gamemodes":["push"],"location":"Rome, Italy","country_code":"IT"},{"name":"Esperança","screenshot":"https://overfast-api.tekrop.fr/static/maps/esperanca.jpg","gamemodes":["push"],"location":"Portugal","country_code":"PT"},{"name":"New Queen Street","screenshot":"https://overfast-api.tekrop.fr/static/maps/new_queen_street.jpg","gamemodes":["push"],"location":"Toronto, Canada","country_code":"CA"},{"name":"Antarctic Peninsula","screenshot":"https://overfast-api.tekrop.fr/static/maps/antarctic_peninsula.jpg","gamemodes":["control"],"location":"Antarctica","country_code":"AQ"},{"name":"New Junk City","screenshot":"https://overfast-api.tekrop.fr/static/maps/new_junk_city.jpg","gamemodes":["flashpoint"],"location":"Central Australia","country_code":"AU"},{"name":"Suravasa","screenshot":"https://overfast-api.tekrop.fr/static/maps/suravasa.jpg","gamemodes":["flashpoint"],"location":"India","country_code":"IN"},{"name":"Samoa","screenshot":"https://overfast-api.tekrop.fr/static/maps/samoa.jpg","gamemodes":["control"],"location":"Samoa","country_code":"WS"},{"name":"Runasapi","screenshot":"https://overfast-api.tekrop.fr/static/maps/runasapi.jpg","gamemodes":["push"],"location":"Peru","country_code":"PE"}];
+
         function showSection(sectionId) {
             document.querySelectorAll('.content').forEach(el => el.classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
-            if (sectionId === 'heroes') {
-                loadHeroes();
-            }
         }
 
-        async function loadHeroes() {
-            const heroGrid = document.getElementById('heroGrid');
-            heroGrid.innerHTML = 'Loading...';
+        async function showHeroDetails(heroKey) {
+            const hero = heroes.find(h => h.key === heroKey);
+            if (!hero) return;
+
+            const modalHeroName = document.getElementById('modalHeroName');
+            const modalHeroDetails = document.getElementById('modalHeroDetails');
+            const modal = document.getElementById('heroModal');
+
+            modalHeroName.textContent = hero.name + ' | ' + hero.role.charAt(0).toUpperCase() + hero.role.slice(1);
+            modalHeroDetails.innerHTML = 'Loading details...';
+
             try {
-                const response = await fetch('https://overfast-api.tekrop.fr/heroes');
-                const heroes = await response.json();
-                heroGrid.innerHTML = heroes.map(hero => `
-                    <div class="relative">
-                        <img src="${hero.portrait}" alt="${hero.name}" class="w-full h-auto rounded-lg">
-                        <div class="absolute bottom-0 right-0 bg-black bg-opacity-50 p-1 rounded-tl-lg">
-                            ${getRoleIcon(hero.role)}
-                        </div>
-                        <div class="mt-2">
-                            <h3 class="text-lg font-semibold">${hero.name}</h3>
-                        </div>
-                    </div>
-                `).join('');
+                const response = await fetch(API_BASE_URL + '/heroes/' + heroKey);
+                const details = await response.json();
+
+                const lore = details.story && details.story.chapters 
+                    ? details.story.chapters.map(chapter => '<p>' + chapter.content + '</p>').join('')
+                    : 'Lore not available.';
+
+                modalHeroDetails.innerHTML = 
+                    '<div class="hero-description">' + details.description + '</div>' +
+                    '<h3 class="text-xl font-bold mt-4"></h3>' +
+                    '<div class="hero-lore">' + lore + '</div>' +
+                    '<h3 class="text-xl font-bold mt-4">Abilities:</h3>' +
+                    details.abilities.map((ability, index) => 
+                        '<div class="ability-box">' +
+                            '<div class="ability-header">' + ability.name + '</div>' +
+                            '<div class="ability-details">' +
+                                (index === 0 
+                                    ? '<img src="' + ability.icon + '" alt="' + ability.name + '" class="ability-wide-image">'
+                                    : '<img src="' + ability.icon + '" alt="' + ability.name + '" class="ability-image">'
+                                ) +
+                                '<div>' + ability.description + '</div>' +
+                            '</div>' +
+                        '</div>'
+                    ).join('');
+
             } catch (error) {
-                console.error('Error loading heroes:', error);
-                heroGrid.innerHTML = 'Error loading heroes.';
+                console.error('Error loading hero details:', error);
+                modalHeroDetails.innerHTML = 'Error loading hero details.';
             }
+
+            modal.classList.remove('hidden');
         }
 
-        function getRoleIcon(role) {
-            const icons = {
-                tank: '<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.667l-10.667 5.333v6.667c0 6.147 4.56 11.893 10.667 13.333 6.107-1.44 10.667-7.186 10.667-13.333V8L16 2.667zm0 14.666V5.333l8 4v5.333c0 4.267-3.2 8.267-8 9.6V17.333z" fill="currentColor"/></svg>',
-                damage: '<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M24.267 13.733L16 8l-8.267 5.733L16 19.467l8.267-5.734zm-16.534 0L16 19.467l8.267-5.734L16 8l-8.267 5.733zm8.534 11.734l8.266-5.734L16 13.733l-8.267 5.733L16 25.467z" fill="currentColor"/></svg>',
-                support: '<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M22.667 14.667v-4h-4V6h-5.334v4.667h-4v4h4v4.666h5.334v-4.666h4zm-6.667 12c6.627 0 12-5.373 12-12s-5.373-12-12-12s-12 5.373-12 12s5.373 12 12 12z" fill="currentColor"/></svg>'
-            };
-            return icons[role.toLowerCase()] || '';
+        function closeModal() {
+            document.getElementById('heroModal').classList.add('hidden');
         }
 
         async function searchPlayer() {
@@ -81,13 +1211,29 @@
             resultDiv.innerHTML = 'Searching...';
 
             try {
-                const response = await fetch(`https://overfast-api.tekrop.fr/players/${playerId}`);
+                const response = await fetch(API_BASE_URL + '/players/' + playerId);
                 const player = await response.json();
-                resultDiv.innerHTML = `
-                    <h3>${player.username}</h3>
-                    <p>Title: ${player.title || 'N/A'}</p>
-                    <p>Endorsement Level: ${player.endorsement ? player.endorsement.level : 'N/A'}</p>
-                `;
+                
+                let competitiveRanks = '';
+                if (player.summary.competitive) {
+                    competitiveRanks = Object.entries(player.summary.competitive)
+                        .map(([platform, ranks]) => 
+                            '<h4 class="font-bold">' + platform.toUpperCase() + ':</h4>' +
+                            '<ul>' +
+                                Object.entries(ranks).map(([role, rank]) => 
+                                    '<li>' + role + ': ' + rank.division + ' ' + rank.tier + '</li>'
+                                ).join('') +
+                            '</ul>'
+                        ).join('');
+                }
+
+                resultDiv.innerHTML = 
+                    '<h3 class="text-xl font-bold">' + player.summary.username + '</h3>' +
+                    '<img src="' + (player.summary.avatar || 'https://via.placeholder.com/150') + '" alt="Player Avatar" class="w-32 h-32 my-2">' +
+                    '<p>Title: ' + (player.summary.title || 'N/A') + '</p>' +
+                    '<p>Endorsement Level: ' + (player.summary.endorsement ? player.summary.endorsement.level : 'N/A') + '</p>' +
+                    '<h4 class="font-bold mt-4">Competitive Ranks:</h4>' +
+                    (competitiveRanks || 'No competitive ranks available');
             } catch (error) {
                 resultDiv.innerHTML = 'Error: Player not found or an error occurred.';
             }
