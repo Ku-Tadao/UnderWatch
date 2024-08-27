@@ -1205,39 +1205,46 @@
             document.getElementById('heroModal').classList.add('hidden');
         }
 
-        async function searchPlayer() {
-            const playerId = document.getElementById('playerInput').value;
-            const resultDiv = document.getElementById('playerResult');
-            resultDiv.innerHTML = 'Searching...';
+async function searchPlayer() {
+    const playerInput = document.getElementById('playerInput').value;
+    const playerIdFormatted = playerInput.replace('#', '-');
+    const resultDiv = document.getElementById('playerResult');
+    resultDiv.innerHTML = 'Searching...';
 
-            try {
-                const response = await fetch(API_BASE_URL + '/players/' + playerId);
-                const player = await response.json();
-                
-                let competitiveRanks = '';
-                if (player.summary.competitive) {
-                    competitiveRanks = Object.entries(player.summary.competitive)
-                        .map(([platform, ranks]) => 
-                            '<h4 class="font-bold">' + platform.toUpperCase() + ':</h4>' +
-                            '<ul>' +
-                                Object.entries(ranks).map(([role, rank]) => 
-                                    '<li>' + role + ': ' + rank.division + ' ' + rank.tier + '</li>'
-                                ).join('') +
-                            '</ul>'
-                        ).join('');
-                }
-
-                resultDiv.innerHTML = 
-                    '<h3 class="text-xl font-bold">' + player.summary.username + '</h3>' +
-                    '<img src="' + (player.summary.avatar || 'https://via.placeholder.com/150') + '" alt="Player Avatar" class="w-32 h-32 my-2">' +
-                    '<p>Title: ' + (player.summary.title || 'N/A') + '</p>' +
-                    '<p>Endorsement Level: ' + (player.summary.endorsement ? player.summary.endorsement.level : 'N/A') + '</p>' +
-                    '<h4 class="font-bold mt-4">Competitive Ranks:</h4>' +
-                    (competitiveRanks || 'No competitive ranks available');
-            } catch (error) {
-                resultDiv.innerHTML = 'Error: Player not found or an error occurred.';
-            }
+    try {
+        const response = await fetch(API_BASE_URL + '/players/' + playerIdFormatted);
+        if (!response.ok) {
+            throw new Error('Player not found');
         }
+        const player = await response.json();
+        
+        let competitiveRanks = '';
+        if (player.summary.competitive && player.summary.competitive.pc) {
+            competitiveRanks = Object.entries(player.summary.competitive.pc)
+                .filter(function(entry) { return entry[1] !== null; })
+                .map(function(entry) {
+                    var role = entry[0];
+                    var rank = entry[1];
+                    return '<div class="mb-2">' +
+                        '<h4 class="font-bold">' + role.charAt(0).toUpperCase() + role.slice(1) + ':</h4>' +
+                        '<p>' + rank.division + ' ' + rank.tier + '</p>' +
+                        '<img src="' + rank.rank_icon + '" alt="' + role + ' rank" class="w-8 h-8 inline-block">' +
+                    '</div>';
+                }).join('');
+        }
+
+        resultDiv.innerHTML = 
+            '<h3 class="text-xl font-bold">' + player.summary.username + '</h3>' +
+            '<img src="' + (player.summary.avatar || 'https://via.placeholder.com/150') + '" alt="Player Avatar" class="w-32 h-32 my-2">' +
+            '<p>Title: ' + (player.summary.title || 'N/A') + '</p>' +
+            '<p>Endorsement Level: ' + (player.summary.endorsement ? player.summary.endorsement.level : 'N/A') + '</p>' +
+            '<h4 class="font-bold mt-4">Competitive Ranks (PC):</h4>' +
+            (competitiveRanks || 'No competitive ranks available');
+    } catch (error) {
+        console.error('Error fetching player data:', error);
+        resultDiv.innerHTML = 'Error: Player not found or an error occurred.';
+    }
+}
 
         // Show heroes section by default
         showSection('heroes');
