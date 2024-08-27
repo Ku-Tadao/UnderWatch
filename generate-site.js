@@ -194,7 +194,7 @@ async function generateHTML() {
         </style>
     </head>
     <body>
-        <h1 class="text-2xl font-bold mb-4">OverFast API Website</h1>
+        <h1 class="text-2xl font-bold mb-4">UnderWatch</h1>
         <nav>
             <a href="#" onclick="showSection('heroes')">Heroes</a>
             <a href="#" onclick="showSection('roles')">Roles</a>
