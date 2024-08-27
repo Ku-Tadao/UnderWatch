@@ -1,0 +1,65 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>OverFast API Website</title>
+      <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+          h1, h2 { color: #333; }
+          nav { margin-bottom: 20px; }
+          nav a { margin-right: 15px; text-decoration: none; color: #1a73e8; }
+          .content { margin-top: 20px; }
+          .hidden { display: none; }
+      </style>
+  </head>
+  <body>
+      <h1>OverFast API Website</h1>
+      <nav>
+          <a href="#" onclick="showSection('heroes')">Heroes</a>
+          <a href="#" onclick="showSection('roles')">Roles</a>
+          <a href="#" onclick="showSection('gamemodes')">Gamemodes</a>
+          <a href="#" onclick="showSection('maps')">Maps</a>
+          <a href="#" onclick="showSection('players')">Players</a>
+      </nav>
+      <div id="heroes" class="content"><ul><li>Ana</li><li>Ashe</li><li>Baptiste</li><li>Bastion</li><li>Brigitte</li><li>Cassidy</li><li>Doomfist</li><li>D.Va</li><li>Echo</li><li>Genji</li><li>Hanzo</li><li>Illari</li><li>Junker Queen</li><li>Junkrat</li><li>Juno</li><li>Kiriko</li><li>Lifeweaver</li><li>Lúcio</li><li>Mauga</li><li>Mei</li><li>Mercy</li><li>Moira</li><li>Orisa</li><li>Pharah</li><li>Ramattra</li><li>Reaper</li><li>Reinhardt</li><li>Roadhog</li><li>Sigma</li><li>Sojourn</li><li>Soldier: 76</li><li>Sombra</li><li>Symmetra</li><li>Torbjörn</li><li>Tracer</li><li>Venture</li><li>Widowmaker</li><li>Winston</li><li>Wrecking Ball</li><li>Zarya</li><li>Zenyatta</li></ul></div>
+      <div id="roles" class="content hidden"><ul><li>Tank</li><li>Damage</li><li>Support</li></ul></div>
+      <div id="gamemodes" class="content hidden"><ul><li>Assault</li><li>Capture the Flag</li><li>Control</li><li>Deathmatch</li><li>Elimination</li><li>Escort</li><li>Flashpoint</li><li>Hybrid</li><li>Push</li><li>Team Deathmatch</li></ul></div>
+      <div id="maps" class="content hidden"><ul><li>Hanamura</li><li>Horizon Lunar Colony</li><li>Paris</li><li>Temple of Anubis</li><li>Volskaya Industries</li><li>Ayutthaya</li><li>Busan</li><li>Nepal</li><li>Ilios</li><li>Oasis</li><li>Lijiang Tower</li><li>Château Guillard</li><li>Kanezaka</li><li>Malevento</li><li>Petra</li><li>Black Forest</li><li>Castillo</li><li>Ecopoint: Antarctica</li><li>Necropolis</li><li>Circuit Royal</li><li>Dorado</li><li>Route 66</li><li>Junkertown</li><li>Rialto</li><li>Havana</li><li>Watchpoint: Gibraltar</li><li>Shambali Monastery</li><li>Blizzard World</li><li>Numbani</li><li>Hollywood</li><li>Eichenwalde</li><li>King’s Row</li><li>Midtown</li><li>Paraíso</li><li>Colosseo</li><li>Esperança</li><li>New Queen Street</li><li>Antarctic Peninsula</li><li>New Junk City</li><li>Suravasa</li><li>Samoa</li><li>Runasapi</li></ul></div>
+      <div id="players" class="content hidden">
+          <h2>Player Search</h2>
+          <input type="text" id="playerInput" placeholder="Enter player ID">
+          <button onclick="searchPlayer()">Search</button>
+          <div id="playerResult"></div>
+      </div>
+      <script>
+      function showSection(sectionId) {
+          document.querySelectorAll('.content').forEach(el => el.classList.add('hidden'));
+          document.getElementById(sectionId).classList.remove('hidden');
+      }
+
+      async function searchPlayer() {
+          const playerId = document.getElementById('playerInput').value;
+          const resultDiv = document.getElementById('playerResult');
+          resultDiv.innerHTML = 'Searching...';
+
+          try {
+              const response = await fetch(`https://overfast-api.tekrop.fr/players/${playerId}`);
+              const player = await response.json();
+              resultDiv.innerHTML = `
+                  <h3>${player.username}</h3>
+                  <p>Title: ${player.title || 'N/A'}</p>
+                  <p>Endorsement Level: ${player.endorsement ? player.endorsement.level : 'N/A'}</p>
+              `;
+          } catch (error) {
+              resultDiv.innerHTML = 'Error: Player not found or an error occurred.';
+          }
+      }
+
+      // Show heroes section by default
+      showSection('heroes');
+      </script>
+  </body>
+  </html>
+  
