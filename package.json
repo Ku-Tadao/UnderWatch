@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node generate-site.js"
-  },
+    "build": "node generate-site.js",
+    "dev": "node generate-site.js ./public"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ku-Tadao/UnderWatch.git"
